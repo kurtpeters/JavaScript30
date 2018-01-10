@@ -59,6 +59,10 @@
 
 <script>
   /**
+   * Class name to be applied to active key nodes.
+   */
+  const activeAudioClassName = 'playing';
+  /**
    * Map of audio sounds and key codes.
    */
   let audioList = {};
@@ -67,13 +71,15 @@
    * and listen for playback events, then add the sound to our
    * audio list.
    */
-  document.querySelectorAll('audio').forEach(audio => {
-    const activeAudioClassName = 'playing';
+  Array.from(document.querySelectorAll('audio')).forEach(audio => {
     const node = document.querySelector(`div[data-key="${audio.dataset.key}"]`);
-    audio.addEventListener('ended', () => node.classList.remove(activeAudioClassName), true);
     audio.addEventListener('playing', () => node.classList.add(activeAudioClassName), true);
     audio.addEventListener('replay', () => (audio.currentTime = 0) || audio.play(), true);
     audioList[audio.dataset.key] = audio;
+    /**
+     * Remove the node active class name once the CSS tranform has completed.
+     */
+    node.addEventListener('transitionend', event => event.propertyName === 'transform' && node.classList.remove(activeAudioClassName));
   });
   /**
    * When a key is pressed, check to see if it's supported in our
