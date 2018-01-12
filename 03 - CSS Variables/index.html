@@ -22,6 +22,22 @@
 
   <style>
 
+    :root {
+      --base: #ffc600;
+      --blur: 10px;
+      --spacing: 10px
+    }
+
+    img {
+      background-color: var(--base);
+      padding: var(--spacing);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
+
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -45,6 +61,26 @@
   </style>
 
   <script>
+    /**
+     * Get a list of user contols.
+     */
+    const controls = Array.from(document.querySelectorAll('input'));
+    /**
+     * For each control, add a listner to update our document style variables when the user
+     * triggers an associated input event.
+     *
+     * 1. Apply the control's sizing suffix to the property value. If a suffix does not exist,
+     * apply nothing.
+     */
+    controls.forEach(control => {
+      control.addEventListener('input', () => {
+        document.documentElement.style.setProperty(
+          `--${control.name}`,
+          /* [1] */
+          control.value + (control.dataset.sizing || '')
+        );
+      });
+    });
   </script>
 
 </body>
