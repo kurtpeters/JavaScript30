@@ -70,71 +70,105 @@
   </style>
 
   <script>
-
+    /**
+     * Class representing the hand of a clock.
+     */
     class Hand {
-
+      /**
+       * Create hand.
+       * @param {object} props - Default properties.
+       *
+       * 1. Use default props to set instance properties.
+       * 2. Set default dial roataion.
+       */
       constructor(props) {
-
+        /* [1] */
+        this.degree = props.position / props.spaces * 360;
         this.distance = 360 / props.spaces;
         this.el = props.el;
-        this.position = props.position / props.spaces * 360;
-
-        this.el.style.transform = `rotate(${this.position}deg)`;
+        this.spaces = props.spaces;
+        /* [2] */
+        this.el.style.transform = `rotate(${this.degree}deg)`;
       }
-
-      get isRestored() {
-        return this.position % 360 === 0;
+      /**
+       * Get current hand position.
+       * @return {number} The current hand position.
+       */
+      getPosition() {
+        return Math.round(this.degree * this.spaces / 360) % this.spaces;
       }
-
+      /**
+       * Rotate dial hand one position.
+       */
       move() {
-
-        this.position += this.distance
-
-        this.el.style.transform = `rotate(${this.position}deg)`;
+        this.degree += this.distance
+        this.el.style.transform = `rotate(${this.degree}deg)`;
       }
     }
-
+    /**
+     * Class representing a clock.
+     */
     class Clock {
-
-      constructor() {
-
+      /**
+       * Create clock.
+       * @param {object} props - Default properties.
+       *
+       * 1. Get current date to set hand positions.
+       * 2. Create hour, minute, and second hands.
+       */
+      constructor(props) {
+        /* [1] */
         const currentDate = new Date();
-
+        /* [2] */
         this.hands = {
           hour: new Hand({
-            el: document.querySelector('.hour-hand'),
+            el: document.querySelector(props.hands.hour),
             position: currentDate.getHours() % 12,
             spaces: 12
           }),
           minute: new Hand({
-            el: document.querySelector('.min-hand'),
+            el: document.querySelector(props.hands.minute),
             position: currentDate.getMinutes(),
             spaces: 60
           }),
           second: new Hand({
-            el: document.querySelector('.second-hand'),
+            el: document.querySelector(props.hands.second),
             position: currentDate.getSeconds(),
             spaces: 60
           })
         };
       }
-
+      /**
+       * Move clock hands 1 rotation.
+       *
+       * 1. If the second hand position is set to 0, move the minute hand.
+       * 2. If the minute hand position is set to 0, move the hour hand.
+       */
       turn() {
-
         this.hands.second.move();
-
-        if (this.hands.second.isRestored) {
+        /* [1] */
+        if (this.hands.second.getPosition() === 0) {
           this.hands.minute.move();
         }
-
-        if (this.hands.minute.isRestored) {
+        /* [2] */
+        if (this.hands.minute.getPosition() === 0) {
           this.hands.hour.move();
         }
       }
     }
-
-    const clock = new Clock();
-
+    /**
+     * Create clock instance and provide DOM hand selectors.
+     */
+    const clock = new Clock({
+      hands: {
+        hour: '.hour-hand',
+        minute: '.min-hand',
+        second: '.second-hand'
+      }
+    });
+    /**
+     * Set interval to turn the clock every 1 second.
+     */
     setInterval(() => clock.turn(), 1000);
   </script>
 </body>
