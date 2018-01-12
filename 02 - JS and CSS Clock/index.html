@@ -71,6 +71,29 @@
 
   <script>
 
+    class Hand {
+
+      constructor(props) {
+
+        this.distance = 360 / props.spaces;
+        this.el = props.el;
+        this.position = props.position / props.spaces * 360;
+
+        this.el.style.transform = `rotate(${this.position}deg)`;
+      }
+
+      get isRestored() {
+        return this.position % 360 === 0;
+      }
+
+      move() {
+
+        this.position += this.distance
+
+        this.el.style.transform = `rotate(${this.position}deg)`;
+      }
+    }
+
     class Clock {
 
       constructor() {
@@ -78,38 +101,41 @@
         const currentDate = new Date();
 
         this.hands = {
-          hour: {
-            node: document.querySelector('.hour-hand'),
-            value: (currentDate.getHours() % 12) / 12 * 360
-          },
-          minute: {
-            node: document.querySelector('.min-hand'),
-            value: currentDate.getMinutes() / 60 * 360
-          },
-          second: {
-            node: document.querySelector('.second-hand'),
-            value: currentDate.getSeconds() / 60 * 360
-          }
+          hour: new Hand({
+            el: document.querySelector('.hour-hand'),
+            position: currentDate.getHours() % 12,
+            spaces: 12
+          }),
+          minute: new Hand({
+            el: document.querySelector('.min-hand'),
+            position: currentDate.getMinutes(),
+            spaces: 60
+          }),
+          second: new Hand({
+            el: document.querySelector('.second-hand'),
+            position: currentDate.getSeconds(),
+            spaces: 60
+          })
         };
-
-        this.update();
       }
 
-      update() {
+      turn() {
 
-        this.hands.second.node.style.transform = `rotate(${this.hands.second.value}deg)`;
-        this.hands.minute.node.style.transform = `rotate(${this.hands.minute.value}deg)`;
-        this.hands.hour.node.style.transform = `rotate(${this.hands.hour.value}deg)`;
+        this.hands.second.move();
 
-        this.hands.second.value += 360 / 60;
-        this.hands.minute.value += (this.hands.second.value % 360 === 0 && 360 / 60) || 0;
-        this.hands.hour.value += (this.hands.minute.value % 360 === 0 && 360 / 12) || 0;
+        if (this.hands.second.isRestored) {
+          this.hands.minute.move();
+        }
+
+        if (this.hands.minute.isRestored) {
+          this.hands.hour.move();
+        }
       }
     }
 
     const clock = new Clock();
 
-    setInterval(() => clock.update(), 1000);
+    setInterval(() => clock.turn(), 1000);
   </script>
 </body>
 </html>
