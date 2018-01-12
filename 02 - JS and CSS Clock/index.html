@@ -42,6 +42,7 @@
       margin:50px auto;
       position: relative;
       padding:2rem;
+      transform: rotate(90deg);
       box-shadow:
         0 0 0 4px rgba(0,0,0,0.1),
         inset 0 0 0 3px #EFEFEF,
@@ -62,13 +63,53 @@
       background:black;
       position: absolute;
       top:50%;
+      transition: transform 0.05s cubic-bezier(0.12, 2.59, 0.25, 1);
+      transform-origin: 100%;
     }
 
   </style>
 
   <script>
 
+    class Clock {
 
+      constructor() {
+
+        const currentDate = new Date();
+
+        this.hands = {
+          hour: {
+            node: document.querySelector('.hour-hand'),
+            value: (currentDate.getHours() % 12) / 12 * 360
+          },
+          minute: {
+            node: document.querySelector('.min-hand'),
+            value: currentDate.getMinutes() / 60 * 360
+          },
+          second: {
+            node: document.querySelector('.second-hand'),
+            value: currentDate.getSeconds() / 60 * 360
+          }
+        };
+
+        this.update();
+      }
+
+      update() {
+
+        this.hands.second.node.style.transform = `rotate(${this.hands.second.value}deg)`;
+        this.hands.minute.node.style.transform = `rotate(${this.hands.minute.value}deg)`;
+        this.hands.hour.node.style.transform = `rotate(${this.hands.hour.value}deg)`;
+
+        this.hands.second.value += 360 / 60;
+        this.hands.minute.value += (this.hands.second.value % 360 === 0 && 360 / 60) || 0;
+        this.hands.hour.value += (this.hands.minute.value % 360 === 0 && 360 / 12) || 0;
+      }
+    }
+
+    const clock = new Clock();
+
+    setInterval(() => clock.update(), 1000);
   </script>
 </body>
 </html>
