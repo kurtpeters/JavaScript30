@@ -6,7 +6,7 @@
 - [x] [02 - JS and CSS Clock](02%20-%20JS%20and%20CSS%20Clock)
 - [x] [03 - CSS Variables](03%20-%20CSS%20Variables)
 - [x] [04 - Array Cardio Day 1](04%20-%20Array%20Cardio%20Day%201)
-- [ ] 05 - Flex Panel Gallery
+- [x] 05 - Flex Panel Gallery
 - [ ] 06 - Type Ahead
 - [ ] 07 - Array Cardio Day 2
 - [ ] 08 - Fun with HTML5 Canvas
