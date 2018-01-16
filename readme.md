@@ -16,7 +16,7 @@ This repository is a collection of completed JavaScript30 challenges. Although t
 - [x] [04 - Array Cardio Day 1](04%20-%20Array%20Cardio%20Day%201)
 - [x] [05 - Flex Panel Gallery](05%20-%20Flex%20Panel%20Gallery)
 - [x] [06 - Type Ahead](06%20-%20Type%20Ahead)
-- [ ] 07 - Array Cardio Day 2
+- [x] 07 - Array Cardio Day 2
 - [ ] 08 - Fun with HTML5 Canvas
 - [ ] 09 - Dev Tools Domination
 - [ ] 10 - Hold Shift and Check Checkboxes
