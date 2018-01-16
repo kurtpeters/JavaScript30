@@ -4,6 +4,10 @@
 
 JavaScript30 is a series of challenges created by [Wes Bos](https://github.com/wesbos) for developers and designers who want to become comfortable with both JavaScript fundamentals and working in the DOM without a library. The course steers clear of opinionated design patterns, frameworks, libraries and any type of abstraction, creating environments for individuals to problem solve using the language in its primitive form (vanilla flavored).
 
+## About the project
+
+This repository is a collection of completed JavaScript30 challenges. Although the slogan for the this course is “30 challenges in 30 days,” I’ve had to account for my schedule and extended the timeframe to be “30 challenges in many days.” In addition to the source files found in this repo, I’ll be providing my final thoughts and learnings on the course via [Medium](https://medium.com/@kurtpeters). Thanks for visiting!
+
 ## Challenges
 
 - [x] [01 - JavaScript Drum Kit](01%20-%20JavaScript%20Drum%20Kit)
