@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State">
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
 
-</script>
+    <script>
+      /**
+       * DOM nodes to later manipulate.
+       */
+      const search = document.querySelector('.search');
+      const suggestions = document.querySelector('.suggestions');
+      /**
+       * List of information for different locations.
+       */
+      let locations = [];
+      /**
+       * Fetch cities from endpoint and concat response with locations list.
+       */
+      fetch('https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json')
+        .then(response => response.json())
+        .then(json => locations.push(...json));
+      /**
+       * Listen for search input events and update DOM with matching locations.
+       *
+       * 1. Create input value expression to compare against location data.
+       * 2. Replace suggestions HTML with a list of each matching location.
+       * 3. Highlight the input value within the location name.
+       */
+      search.addEventListener('input', event => {
+        /* [1] */
+        const expression = new RegExp(`(${event.target.value})`, 'i');
+        /* [2] */
+        suggestions.innerHTML = `${
+          locations
+            .filter(location => expression.test(location.city) || expression.test(location.state))
+            .map(location => {
+              const name = `${location.city}, ${location.state}`;
+              /* [3] */
+              return `
+                <li>
+                  <span>${name.replace(expression, '<span class="hl">$1</span>')}</span>
+                  <span class="population">${location.population}</span>
+                </li>
+              `;
+            })
+            .join('')
+        }`;
+      });
+    </script>
   </body>
 </html>
